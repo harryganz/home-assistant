@@ -43,7 +43,14 @@ When Ollama, Plex, etc. are actually requested:
 There's no test suite — verification is running the stack:
 
 ```sh
-podman-compose up -d
+make run   # or: podman-compose up -d
 podman-compose logs -f homeassistant
 curl -sSf http://localhost:8123
 ```
+
+## Makefile
+
+`Makefile` exposes `install`, `run`, and `help` as the primary entry
+points (`make help` is the default goal). If you add new tasks, follow
+the existing `target: ## description` convention — `help` parses those
+comments to generate its output.

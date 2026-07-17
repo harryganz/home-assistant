@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs Podman + podman-compose on the current Linux host.
+# Installs Podman + podman-compose + make on the current Linux host.
 # Safe to re-run: skips anything already installed.
 set -euo pipefail
 
@@ -10,7 +10,7 @@ have() { command -v "$1" >/dev/null 2>&1; }
 
 install_debian() {
     sudo apt-get update
-    sudo apt-get install -y podman
+    sudo apt-get install -y podman make
     if have podman-compose; then
         return
     fi
@@ -24,18 +24,19 @@ install_debian() {
 }
 
 install_fedora() {
-    sudo dnf install -y podman podman-compose
+    sudo dnf install -y podman podman-compose make
 }
 
 install_arch() {
-    sudo pacman -S --noconfirm --needed podman podman-compose
+    sudo pacman -S --noconfirm --needed podman podman-compose make
 }
 
 main() {
-    if have podman && have podman-compose; then
-        log "podman and podman-compose already installed, nothing to do"
+    if have podman && have podman-compose && have make; then
+        log "podman, podman-compose, and make already installed, nothing to do"
         podman --version
         podman-compose --version
+        make --version | head -n1
         exit 0
     fi
 
@@ -77,7 +78,7 @@ main() {
                     ;;
                 *)
                     err "Unsupported/unrecognized distro (ID=${ID:-unknown}, ID_LIKE=${ID_LIKE:-unknown})."
-                    err "Please install 'podman' and 'podman-compose' manually using your package manager."
+                    err "Please install 'podman', 'podman-compose', and 'make' manually using your package manager."
                     exit 1
                     ;;
             esac
@@ -87,7 +88,8 @@ main() {
     log "Verifying installation"
     podman --version
     podman-compose --version
-    log "Done. Copy .env.example to .env, fill in values, then run: podman-compose up -d"
+    make --version | head -n1
+    log "Done. Run: make install"
 }
 
 main "$@"

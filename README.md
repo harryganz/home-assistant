@@ -17,15 +17,16 @@ services in `compose.yaml` later).
 ```sh
 git clone <this-repo-url>
 cd home-assistant
-./install.sh                  # installs Podman + podman-compose
-cp .env.example .env
+make install                  # installs Podman + podman-compose + make, creates .env
 $EDITOR .env                  # set TZ and, if needed, HA_CONFIG_DIR
-podman-compose up -d
+make run                      # podman-compose up -d
 podman-compose logs -f homeassistant   # watch it come up
 ```
 
 Then open `http://<this-host>:8123` and complete the Home Assistant
 onboarding wizard.
+
+Run `make help` to see all available tasks.
 
 ## Moving to another device
 
@@ -34,9 +35,9 @@ This repo *is* the portable unit. On the new device:
 ```sh
 git clone <this-repo-url>
 cd home-assistant
-./install.sh
-cp .env.example .env && $EDITOR .env
-podman-compose up -d
+make install
+$EDITOR .env
+make run
 ```
 
 Your automations, scripts, scenes, and `configuration.yaml` come along via
