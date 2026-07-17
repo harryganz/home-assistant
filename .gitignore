@@ -12,6 +12,9 @@ homeassistant/config/*.log.*
 homeassistant/config/tts/
 homeassistant/config/deps/
 homeassistant/config/image/
+homeassistant/config/blueprints/
+homeassistant/config/.HA_VERSION
+homeassistant/config/.ha_run.lock
 
 # Claude Code local settings
 .claude/settings.local.json
