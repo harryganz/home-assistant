@@ -1,0 +1,11 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${HA_CONFIG_DIR}:/config:Z

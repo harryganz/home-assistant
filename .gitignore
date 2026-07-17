@@ -1,0 +1,17 @@
+# Host-specific env values
+.env
+
+# Home Assistant runtime state / secrets — never commit these
+homeassistant/config/secrets.yaml
+homeassistant/config/.storage/
+homeassistant/config/.cloud/
+homeassistant/config/*.db
+homeassistant/config/*.db-*
+homeassistant/config/*.log
+homeassistant/config/*.log.*
+homeassistant/config/tts/
+homeassistant/config/deps/
+homeassistant/config/image/
+
+# Claude Code local settings
+.claude/settings.local.json
