@@ -44,22 +44,6 @@ Your automations, scripts, scenes, and `configuration.yaml` come along via
 git. Device pairings, auth tokens, and history do not (see below) — those
 are local to each running instance by design.
 
-## What's tracked vs. gitignored
-
-Home Assistant's config directory (`homeassistant/config/`) mixes
-human-authored YAML with runtime state. Only the YAML is committed:
-
-**Tracked:** `configuration.yaml`, `automations.yaml`, `scripts.yaml`,
-`scenes.yaml`, `custom_sentences/`, and similar config files you edit
-directly.
-
-**Gitignored** (local/secret, regenerated per instance):
-`secrets.yaml`, `.storage/` (auth tokens, device pairings), the SQLite
-history database, logs, `tts/`, `deps/`, `image/`, and `.env`.
-
-If `configuration.yaml` references `!secret some_key`, create
-`homeassistant/config/secrets.yaml` locally on each host — it's never
-committed.
 
 ## Common operations
 
@@ -135,3 +119,4 @@ loginctl enable-linger $USER
 
 Combined with `restart: unless-stopped` in `compose.yaml`, the container
 will come back up after a reboot.
+
