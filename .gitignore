@@ -16,6 +16,10 @@ homeassistant/config/blueprints/
 homeassistant/config/.HA_VERSION
 homeassistant/config/.ha_run.lock
 homeassistant/config/.cache/
+homeassistant/config/.shopping_list.json
+
+# Wyoming Whisper model cache — large binaries, redownloaded per instance
+whisper/data/
 
 # Claude Code local settings
 .claude/settings.local.json

@@ -75,6 +75,41 @@ The container uses `network_mode: host` so Home Assistant can discover
 devices on the local network (mDNS/SSDP, HomeKit, Bluetooth, etc.) the same
 way it would running directly on the host.
 
+## Voice Assist / Shopping List
+
+`make run` also brings up a `whisper` container (local speech-to-text via
+the [Wyoming protocol](https://www.home-assistant.io/integrations/wyoming/)),
+so you can add items to your Home Assistant shopping list by voice from the
+companion app. `shopping_list`, `conversation`, and `assist_pipeline` are
+already enabled via `default_config:` — Whisper fills in the missing
+speech-to-text piece.
+
+Confirm it's healthy with `podman-compose logs -f whisper` — on first run
+it downloads the model set by `WHISPER_MODEL` in `.env`.
+
+**One-time setup in the HA UI** (this lives in `.storage/`, so it isn't
+tracked in git and has to be repeated per instance):
+
+1. Settings → Devices & Services → Add Integration → **Wyoming Protocol** →
+   host `localhost`, port `10300`. This creates a Whisper speech-to-text
+   entity.
+2. Settings → Voice assistants → **Assist** → edit the "Home Assistant"
+   pipeline → set **Speech-to-text** to the new Whisper entity → Save.
+   Leave the conversation agent as the built-in "Home Assistant" agent —
+   it already understands shopping-list phrasing (e.g. "add eggs to the
+   shopping list") out of the box.
+
+**Using it from your phone:**
+
+1. Open the Home Assistant companion app and make sure it's logged into
+   this instance.
+2. Tap the Assist icon (chat bubble) and grant microphone permission when
+   prompted.
+3. Tap the mic and say something like "Add milk to the shopping list."
+4. Optional: Android supports an Assist quick-settings tile/home-screen
+   widget for one-tap voice access; iOS can trigger Assist via a Siri
+   Shortcut.
+
 ## Boot persistence
 
 Rootless Podman containers don't survive a reboot unless the user session

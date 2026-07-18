@@ -9,3 +9,13 @@ services:
       - TZ=${TZ}
     volumes:
       - ${HA_CONFIG_DIR}:/config:Z
+
+  whisper:
+    container_name: whisper
+    image: docker.io/rhasspy/wyoming-whisper
+    restart: unless-stopped
+    command: --model ${WHISPER_MODEL} --language ${WHISPER_LANGUAGE}
+    volumes:
+      - ${WHISPER_DATA_DIR}:/data:Z
+    ports:
+      - "10300:10300"
