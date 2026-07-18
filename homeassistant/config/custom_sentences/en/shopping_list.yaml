@@ -1,0 +1,11 @@
+language: "en"
+intents:
+  HassShoppingListLastItems:
+    data:
+      - sentences:
+          - "what's on my shopping list"
+          - "what is on my shopping list"
+          - "what's on the shopping list"
+          - "what is on the shopping list"
+          - "read (me |)my shopping list"
+          - "read (me |)the shopping list"

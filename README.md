@@ -50,7 +50,8 @@ Home Assistant's config directory (`homeassistant/config/`) mixes
 human-authored YAML with runtime state. Only the YAML is committed:
 
 **Tracked:** `configuration.yaml`, `automations.yaml`, `scripts.yaml`,
-`scenes.yaml`, and similar config files you edit directly.
+`scenes.yaml`, `custom_sentences/`, and similar config files you edit
+directly.
 
 **Gitignored** (local/secret, regenerated per instance):
 `secrets.yaml`, `.storage/` (auth tokens, device pairings), the SQLite
@@ -77,27 +78,39 @@ way it would running directly on the host.
 
 ## Voice Assist / Shopping List
 
-`make run` also brings up a `whisper` container (local speech-to-text via
-the [Wyoming protocol](https://www.home-assistant.io/integrations/wyoming/)),
-so you can add items to your Home Assistant shopping list by voice from the
-companion app. `shopping_list`, `conversation`, and `assist_pipeline` are
-already enabled via `default_config:` — Whisper fills in the missing
-speech-to-text piece.
+`make run` also brings up `whisper` and `piper` containers (local
+speech-to-text and text-to-speech via the
+[Wyoming protocol](https://www.home-assistant.io/integrations/wyoming/)),
+so you can add items to — and ask what's on — your Home Assistant shopping
+list by voice from the companion app, with the answer spoken back.
+`shopping_list`, `conversation`, and `assist_pipeline` are already enabled
+via `default_config:`; Whisper and Piper fill in the missing speech-to-text
+and text-to-speech pieces.
 
-Confirm it's healthy with `podman-compose logs -f whisper` — on first run
-it downloads the model set by `WHISPER_MODEL` in `.env`.
+Confirm they're healthy with `podman-compose logs -f whisper piper` — on
+first run each downloads the model set by `WHISPER_MODEL`/`PIPER_VOICE` in
+`.env`.
 
 **One-time setup in the HA UI** (this lives in `.storage/`, so it isn't
 tracked in git and has to be repeated per instance):
 
 1. Settings → Devices & Services → Add Integration → **Wyoming Protocol** →
-   host `localhost`, port `10300`. This creates a Whisper speech-to-text
-   entity.
+   host `localhost`, port `10300`. Repeat for port `10200`. This creates a
+   Whisper speech-to-text entity and a Piper text-to-speech entity.
 2. Settings → Voice assistants → **Assist** → edit the "Home Assistant"
-   pipeline → set **Speech-to-text** to the new Whisper entity → Save.
-   Leave the conversation agent as the built-in "Home Assistant" agent —
-   it already understands shopping-list phrasing (e.g. "add eggs to the
-   shopping list") out of the box.
+   pipeline → set **Speech-to-text** to the Whisper entity and
+   **Text-to-speech** to the Piper entity → Save. Leave the conversation
+   agent as the built-in "Home Assistant" agent — it already understands
+   shopping-list phrasing (e.g. "add eggs to the shopping list") out of the
+   box.
+
+**Reading the list back:** the shopping-list integration has a built-in
+handler that reads back the top items, but this HA version doesn't ship a
+trigger phrase for it by default. `homeassistant/config/custom_sentences/en/shopping_list.yaml`
+adds one, so phrases like "what's on my shopping list" or "read my
+shopping list" work — no automation or template needed, it just points
+existing phrases at the existing handler. Add more phrasings there if the
+ones that ship don't match how you naturally ask.
 
 **Using it from your phone:**
 
@@ -105,7 +118,8 @@ tracked in git and has to be repeated per instance):
    this instance.
 2. Tap the Assist icon (chat bubble) and grant microphone permission when
    prompted.
-3. Tap the mic and say something like "Add milk to the shopping list."
+3. Tap the mic and say "Add milk to the shopping list," or "what's on my
+   shopping list?" to hear it read back.
 4. Optional: Android supports an Assist quick-settings tile/home-screen
    widget for one-tap voice access; iOS can trigger Assist via a Siri
    Shortcut.

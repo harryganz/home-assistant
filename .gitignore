@@ -21,5 +21,8 @@ homeassistant/config/.shopping_list.json
 # Wyoming Whisper model cache — large binaries, redownloaded per instance
 whisper/data/
 
+# Wyoming Piper voice model cache — large binaries, redownloaded per instance
+piper/data/
+
 # Claude Code local settings
 .claude/settings.local.json

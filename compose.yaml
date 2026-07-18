@@ -19,3 +19,13 @@ services:
       - ${WHISPER_DATA_DIR}:/data:Z
     ports:
       - "10300:10300"
+
+  piper:
+    container_name: piper
+    image: docker.io/rhasspy/wyoming-piper
+    restart: unless-stopped
+    command: --voice ${PIPER_VOICE} --data-dir /data --download-dir /data
+    volumes:
+      - ${PIPER_DATA_DIR}:/data:Z
+    ports:
+      - "10200:10200"
